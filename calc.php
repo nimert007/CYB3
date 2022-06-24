@@ -40,7 +40,7 @@ if (!isset($_SESSION["user"])) {
 
 	<body>
 		<a href="index1.html">Домашняя страница</a>
-		<h1>Калькулятор на чистом JS</h1>
+		<h1>Калькулятор на чистом PHP</h1>
 		<input type="text" id="num1" name="число 1"> <br/>
 		<input type="text" id="num2" name="число 2"> <br/>
 		<button onclick="plus();">+</button>
