@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="utf-8">
+    <style>
+        /* @import url('https://fonts.googleapis.com/css?family=Nunito:400,600&display=swap') */
+ 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            outline: none;
+        }
+ 
+        body {
+            min-height: 100vh;
+            line-height: 1;
+            display: flex;
+            font-family: 'Nunito', sans-serif;
+        }
+ 
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+ 
+        .container {
+            margin: auto;
+            width: 450px;
+            height: 300px;
+            border: 1px solid #dfe6e9;
+            border-radius: 10px;
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+ 
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+            text-transform: uppercase;
+            color: #2d3436;
+        }
+ 
+        p {
+            margin-bottom: 20px;
+            color: #636e72;
+        }
+ 
+        .group {
+            margin: auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+        }
+ 
+        input,
+        select {
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid #b2bec3;
+            width: 100%;
+            padding: 10px;
+        }
+    </style>
+</head>
+ 
+<body>
+    <div class="container">
+        <h2>Конвертер валют</h2>
+        <p>Последнее обновление: <b class="date">26.03.2020 18:35:57</b></p>
+        <div class="group">
+            <input type="number" class="first-input">
+            <select class="first-select"></select>
+ 
+            <input type="number" class="second-input">
+            <select class="second-select"></select>
+        </div>
+    </div>
+    <script>
+        async function fetchJSONAsync(url, init) {
+            let response = await fetch(url, init);
+            if (response.ok) {
+                let json = await response.json();
+                return json;
+            }
+            else
+                throw new Error(`${response.status}: ${response.statusText}`);
+        }
+ 
+        const container = document.querySelector('.container .group');
+        const currencyDate = document.querySelector('.container .date');
+ 
+        const firstInput = container.querySelector('.first-input');
+        const secondInput = container.querySelector('.second-input');
+ 
+        /**
+         * @type {HTMLSelectElement}
+         */
+        const firstSelect = container.querySelector('.first-select');
+        const secondSelect = container.querySelector('.second-select');
+ 
+        firstSelect.onchange = firstSelect_change;
+        secondSelect.onchange = secondSelect_change;
+        firstInput.oninput = firstInput_input;
+        secondInput.oninput = secondInput_input;
+ 
+        let data;
+        let obj1;
+        let obj2;
+        // {"Cur_ID":298,"Date":"2021-03-14T00:00:00","Cur_Abbreviation":"RUB","Cur_Scale":100,"Cur_Name":"Российских рублей","Cur_OfficialRate":3.5259}
+        function firstSelect_change() {
+            obj1 = data.find(e => e.Cur_Abbreviation === firstSelect.value);
+            obj2 = data.find(e => e.Cur_Abbreviation === secondSelect.value);
+            firstInput_input();
+        }
+ 
+        function firstInput_input() {
+            let value = +firstInput.value;
+            secondInput.value = (obj2.Cur_Scale * value * obj1.Cur_OfficialRate / obj2.Cur_OfficialRate / obj1.Cur_Scale).toFixed(4);
+        }
+ 
+        function secondSelect_change() {
+            obj1 = data.find(e => e.Cur_Abbreviation === firstSelect.value);
+            obj2 = data.find(e => e.Cur_Abbreviation === secondSelect.value);
+            firstInput_input();
+        }
+ 
+        function secondInput_input() {
+            let value = +secondInput.value;
+            firstInput.value = (obj2.Cur_OfficialRate * value * obj1.Cur_Scale / obj2.Cur_Scale / obj1.Cur_OfficialRate).toFixed(4);
+        }
+ 
+        function handleRequest() {
+            let date = new Date(data[0].Date);
+ 
+            let BYN = {
+                Cur_Abbreviation: "BYN",
+                Cur_Name: "Белорусский рубль",
+                Cur_OfficialRate: 1,
+                Cur_Scale: 1,
+                Date: data[0].Date
+            };
+            data.push(BYN);
+            data.sort((a, b) => (a.Cur_Name > b.Cur_Name) - (b.Cur_Name > a.Cur_Name));
+ 
+            currencyDate.innerHTML = date.toLocaleDateString('ru-RU');
+            for (let e of data) {
+                firstSelect.options.add(new Option(e.Cur_Name, e.Cur_Abbreviation, false, e.Cur_Abbreviation === "BYN"));
+                secondSelect.options.add(new Option(e.Cur_Name, e.Cur_Abbreviation, false, e.Cur_Abbreviation === "RUB"));
+            }
+            firstInput.value = 1;
+            firstSelect_change();
+        }
+ 
+        (async function main() {
+            try {
+                data = await fetchJSONAsync("https://www.nbrb.by/api/exrates/rates?periodicity=0");
+                handleRequest();
+            } catch (error) {
+                console.log(error.message);
+            }
+        })();
+    </script>
+</body>
+ 
+</html>

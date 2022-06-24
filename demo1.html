@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Лекция №1</title>
+		<meta charset="utf-8">
+		<style type="text/css">
+			h1 {
+			  /* определение внешнего вида тега */
+			  color: #00FF00;
+			  background-color: #000000;	
+			}
+		</style>
+		<script type="text/javascript">
+			function sayHello(){
+				// Моя первая событийная программа по джаваскрипт
+				//alert("Hello amigo!!!");
+				document.getElementById("hdr1").innerText = "Hello chumba";
+				document.getElementById("hdr1").style.color = "red";
+				document.getElementById("hdr1").style.background = "gray";
+				document.getElementById("pic").style.display = "none";
+			}
+		</script>
+	</head>
+
+	<body>
+		<!-- моя первая страница -->
+		<a href="index1.html">Домашняя страница</a>
+		<h1 id="hdr1">Материалы лекции №1</h1>
+		<button onclick="sayHello();">Click me!!</button>
+		<p>First paragraph    </p>
+		<p>Second paragraph   </p>
+		<p>Третий абзац     </p>
+		<h1>Раздел 2</h1> 
+		<img src="images/2.jpg" style="width: 800px" id="pic" /> <br />
+		<p>
+			<a href="https://www.kali.org/">WWW kali for you</a>
+			<table border="2" style="width: 50%">
+				<tr>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+				</tr>
+				<tr>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+				</tr>
+				<tr>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+					<td>askdjfas;kdjf</td>
+				</tr>
+			</table>
+		</p>
+	</body>
+
+</html>
