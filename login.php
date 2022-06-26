@@ -20,8 +20,9 @@
 		<h1 id="hdr1">Введите имя и пароль</h1>
 
 		<form action="check_login.php" method="POST">
+					<input type="reset" value="Reset"> <br/>
             		<input type="text" name="txtUser" /> <br/>
-           		 <input type="password" name="txtPwd"/> <br/>
+           		    <input type="password" name="txtPwd"/> <br/>
             		<input type="submit" value="Войти!" />
         	</form>
 	</body>
